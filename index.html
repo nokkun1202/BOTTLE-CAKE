@@ -1280,6 +1280,13 @@ body.viewer-mode .editor-toggle {
     <div class="editor-section">
 
         <button
+            onclick="saveBook()">
+
+            책 저장하기
+
+        </button>
+
+        <button
             onclick="resetBook()">
 
             전체 초기화
@@ -1612,6 +1619,75 @@ for (
 
 
 /* =========================================================
+   저장된 책 불러오기
+========================================================= */
+
+function loadSavedBook() {
+
+    const savedElement =
+        document.getElementById("savedBookData");
+
+    if (!savedElement) return;
+
+    try {
+
+        const saved =
+            JSON.parse(savedElement.textContent);
+
+        if (Array.isArray(saved.pages)) {
+
+            saved.pages.forEach(function(page, index) {
+
+                if (pages[index] && page && page.image) {
+                    pages[index].image = page.image;
+                }
+
+            });
+
+        }
+
+        if (saved.audioDataURL) {
+
+            audioDataURL = saved.audioDataURL;
+            audio.src = audioDataURL;
+            audio.loop = true;
+
+        }
+
+        if (saved.musicTitle) {
+
+            document.getElementById("musicTitle").textContent =
+                saved.musicTitle;
+
+        }
+
+        if (saved.albumArt) {
+
+            const image =
+                document.getElementById("albumImage");
+
+            const placeholder =
+                document.getElementById("albumPlaceholder");
+
+            image.src = saved.albumArt;
+            image.style.display = "block";
+            placeholder.style.display = "none";
+
+        }
+
+    } catch (error) {
+
+        console.warn(
+            "저장된 책 데이터를 불러올 수 없습니다.",
+            error
+        );
+
+    }
+
+}
+
+
+/* =========================================================
    상태
 ========================================================= */
 
@@ -1633,6 +1709,9 @@ const audio =
 
 
 let audioURL = null;
+
+/* 저장용 음악 데이터 */
+let audioDataURL = null;
 
 
 /* =========================================================
@@ -2315,6 +2394,25 @@ document
 
 
             if (!file) return;
+
+
+            /* 저장용 음악 데이터 */
+            audioDataURL =
+                await new Promise(function(resolve) {
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        resolve(e.target.result);
+                    };
+
+                    reader.onerror = function() {
+                        resolve(null);
+                    };
+
+                    reader.readAsDataURL(file);
+
+                });
 
 
             /*
@@ -3053,10 +3151,136 @@ document.addEventListener(
 
 
 /* =========================================================
+   책 저장하기
+
+   현재 편집한 이미지 / 음악 / 앨범아트를
+   하나의 HTML 파일 안에 넣어 저장합니다.
+========================================================= */
+
+async function getAlbumArtDataURL() {
+
+    const image =
+        document.getElementById("albumImage");
+
+    if (!image || image.style.display === "none" || !image.src) {
+        return null;
+    }
+
+    if (image.src.startsWith("data:")) {
+        return image.src;
+    }
+
+    try {
+
+        const response = await fetch(image.src);
+        const blob = await response.blob();
+
+        return await new Promise(function(resolve) {
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                resolve(e.target.result);
+            };
+
+            reader.onerror = function() {
+                resolve(null);
+            };
+
+            reader.readAsDataURL(blob);
+
+        });
+
+    } catch (error) {
+
+        console.warn("앨범아트를 저장할 수 없습니다.", error);
+        return null;
+
+    }
+
+}
+
+
+async function saveBook() {
+
+    if (isViewerMode) return;
+
+
+    const savedData = {
+        pages: pages,
+        audioDataURL: audioDataURL || null,
+        musicTitle: document.getElementById("musicTitle").textContent,
+        albumArt: await getAlbumArtDataURL()
+    };
+
+
+    let html = document.documentElement.outerHTML;
+
+
+    /* 이미 저장된 데이터를 다시 저장할 때 기존 데이터를 제거 */
+    html = html.replace(
+        /\s*<script id="savedBookData" type="application\/json">[\s\S]*?<\/script>/,
+        ""
+    );
+
+
+    let json = JSON.stringify(savedData);
+
+    /* 저장 데이터가 script 태그를 깨뜨리지 않도록 보호 */
+    json = json
+        .replace(/</g, "\\u003c")
+        .replace(/>/g, "\\u003e")
+        .replace(/&/g, "\\u0026");
+
+
+    const savedScript =
+        '<script id="savedBookData" type="application/json">' +
+        json +
+        "<" + "/script>";
+
+
+    html = html.replace(
+        "</body>",
+        savedScript + "\\n</body>"
+    );
+
+
+    const blob = new Blob(
+        [html],
+        { type: "text/html;charset=utf-8" }
+    );
+
+
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "illustration_book_saved.html";
+
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+
+    setTimeout(function() {
+        URL.revokeObjectURL(url);
+    }, 1000);
+
+
+    alert(
+        "일러스트레이션북을 저장했습니다.\\n\\n저장된 HTML 파일을 웹에 올리면\\n?view=1 관람객 링크로 사용할 수 있습니다."
+    );
+
+}
+
+
+/* =========================================================
    편집창
 ========================================================= */
 
 function toggleEditor() {
+
+    if (isViewerMode) return;
+
 
     const editor =
         document.getElementById(
@@ -3192,6 +3416,8 @@ function resetBook() {
 
     audio.src = "";
 
+    audioDataURL = null;
+
 
     if (audioURL) {
 
@@ -3290,6 +3516,8 @@ function resetBook() {
 /* =========================================================
    초기 렌더링
 ========================================================= */
+
+loadSavedBook();
 
 renderBook();
 
