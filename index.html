@@ -1,0 +1,3948 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+>
+
+<title>Illustration Book</title>
+
+
+<style>
+
+/* =========================================================
+   기본 설정
+========================================================= */
+
+* {
+    box-sizing: border-box;
+}
+
+
+html,
+body {
+
+    margin: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+}
+
+
+body {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background: #cfeef7;
+
+    font-family:
+        "Pretendard",
+        "Noto Sans KR",
+        Arial,
+        sans-serif;
+}
+
+
+/* =========================================================
+   책 전체
+========================================================= */
+
+.book-wrapper {
+
+    position: relative;
+
+    width: min(94vw, 1190px);
+
+    aspect-ratio:
+        1.41421356 / 1;
+
+    perspective: 3000px;
+}
+
+
+.book {
+
+    position: relative;
+
+    width: 100%;
+    height: 100%;
+
+    transform-style:
+        preserve-3d;
+
+    isolation: isolate;
+}
+
+
+/* =========================================================
+   일반 페이지
+========================================================= */
+
+.page {
+
+    position: absolute;
+
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #fff;
+
+    transform-style:
+        preserve-3d;
+
+    box-shadow:
+        0 12px 30px
+        rgba(60,100,110,.14);
+
+    z-index: 10;
+}
+
+
+.page.left {
+
+    left: 0;
+
+    border-radius:
+        5px 0 0 5px;
+
+    background:
+        linear-gradient(
+            to right,
+            #ffffff 0%,
+            #ffffff 84%,
+            rgba(0,0,0,.025) 94%,
+            rgba(0,0,0,.10) 100%
+        );
+}
+
+
+.page.right {
+
+    right: 0;
+
+    border-radius:
+        0 5px 5px 0;
+
+    background:
+        linear-gradient(
+            to left,
+            #ffffff 0%,
+            #ffffff 84%,
+            rgba(0,0,0,.025) 94%,
+            rgba(0,0,0,.10) 100%
+        );
+}
+
+
+.page img {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+
+    user-select: none;
+}
+
+
+/* =========================================================
+   빈 페이지
+========================================================= */
+
+.empty-page {
+
+    width: 100%;
+    height: 100%;
+
+    background: #fff;
+}
+
+
+/* =========================================================
+   페이지 명암
+========================================================= */
+
+.page.left::after {
+
+    content: "";
+
+    position: absolute;
+
+    right: 0;
+    top: 0;
+
+    width: 22%;
+    height: 100%;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(0,0,0,0),
+            rgba(0,0,0,.025) 55%,
+            rgba(0,0,0,.11) 100%
+        );
+
+    opacity: .75;
+
+    z-index: 20;
+}
+
+
+.page.right::after {
+
+    content: "";
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 22%;
+    height: 100%;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(0,0,0,0),
+            rgba(0,0,0,.025) 55%,
+            rgba(0,0,0,.11) 100%
+        );
+
+    opacity: .75;
+
+    z-index: 20;
+}
+
+
+/* =========================================================
+   중앙 책등
+========================================================= */
+
+.book-spine {
+
+    position: absolute;
+
+    left: 50%;
+    top: 0;
+
+    width: 18px;
+    height: 100%;
+
+    transform:
+        translateX(-50%);
+
+    z-index: 80;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to right,
+            rgba(0,0,0,.11),
+            rgba(0,0,0,.035) 35%,
+            rgba(255,255,255,.08) 50%,
+            rgba(0,0,0,.035) 65%,
+            rgba(0,0,0,.11)
+        );
+
+    filter: blur(1px);
+
+    opacity: .65;
+}
+
+
+/* =========================================================
+   첫 화면 왼쪽 음악 페이지
+========================================================= */
+
+.album-page {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 50%;
+    height: 100%;
+
+    z-index: 5;
+
+    overflow: hidden;
+
+    background:
+        linear-gradient(
+            145deg,
+            #ffffff,
+            #f7fcfd
+        );
+
+    border-radius:
+        5px 0 0 5px;
+
+    box-shadow:
+        0 12px 30px
+        rgba(60,100,110,.14);
+}
+
+
+/* =========================================================
+   음악 플레이어 전체
+========================================================= */
+
+.music-card {
+
+    position: absolute;
+
+    left: 50%;
+    top: 50%;
+
+    transform:
+        translate(-50%, -50%);
+
+    width: 58%;
+
+    padding: 7%;
+
+    border-radius: 18px;
+
+    background:
+        rgba(255,255,255,.78);
+
+    border:
+        1px solid
+        rgba(255,255,255,.95);
+
+    box-shadow:
+        0 12px 35px
+        rgba(80,130,145,.12);
+
+    backdrop-filter:
+        blur(12px);
+
+    z-index: 30;
+}
+
+
+/* =========================================================
+   앨범아트
+
+   ★ 핵심
+
+   페이지 전체를 채우지 않고
+   플레이어 안에서 정사각형으로 표시
+
+   contain을 사용하여
+   이미지가 절대 잘리지 않게 함.
+========================================================= */
+
+.album-art-box {
+
+    position: relative;
+
+    width: 100%;
+
+    aspect-ratio: 1 / 1;
+
+    margin: 0 auto 8%;
+
+    overflow: hidden;
+
+    border-radius: 11px;
+
+    background:
+        #edf8fb;
+
+    box-shadow:
+        0 7px 20px
+        rgba(60,100,110,.12);
+}
+
+
+.album-art {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: contain;
+
+    display: none;
+
+    background: #edf8fb;
+}
+
+
+/* =========================================================
+   앨범아트 없을 때
+========================================================= */
+
+.album-art-placeholder {
+
+    position: absolute;
+
+    inset: 0;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    flex-direction: column;
+
+    color: #8aa2aa;
+
+    text-align: center;
+}
+
+
+.album-art-placeholder .note {
+
+    font-size: 30px;
+
+    margin-bottom: 8px;
+
+    opacity: .6;
+}
+
+
+.album-art-placeholder span {
+
+    font-size: 9px;
+
+    line-height: 1.5;
+
+    opacity: .7;
+}
+
+
+/* =========================================================
+   음악 제목
+========================================================= */
+
+.music-title {
+
+    width: 100%;
+
+    margin-bottom: 4%;
+
+    text-align: center;
+
+    font-size: clamp(
+        9px,
+        1vw,
+        13px
+    );
+
+    font-weight: 600;
+
+    color: #4c6870;
+
+    white-space: nowrap;
+
+    overflow: hidden;
+
+    text-overflow: ellipsis;
+}
+
+
+/* =========================================================
+   음악 진행바
+========================================================= */
+
+.progress-area {
+
+    width: 100%;
+
+    margin-bottom: 5%;
+}
+
+
+.progress-bar {
+
+    position: relative;
+
+    width: 100%;
+
+    height: 4px;
+
+    border-radius: 10px;
+
+    background:
+        #dceef2;
+
+    cursor: pointer;
+}
+
+
+.progress-fill {
+
+    position: absolute;
+
+    left: 0;
+    top: 0;
+
+    width: 0%;
+
+    height: 100%;
+
+    border-radius: 10px;
+
+    background:
+        #91cbd7;
+}
+
+
+.progress-dot {
+
+    position: absolute;
+
+    top: 50%;
+
+    left: 0%;
+
+    width: 9px;
+    height: 9px;
+
+    transform:
+        translate(-50%, -50%);
+
+    border-radius: 50%;
+
+    background:
+        #72b8c7;
+
+    box-shadow:
+        0 2px 5px
+        rgba(70,120,130,.2);
+}
+
+
+/* =========================================================
+   시간
+========================================================= */
+
+.time-row {
+
+    display: flex;
+
+    justify-content:
+        space-between;
+
+    margin-top: 5px;
+
+    font-size: 8px;
+
+    color: #9aafb4;
+}
+
+
+/* =========================================================
+   음악 버튼 영역
+========================================================= */
+
+.music-buttons {
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 8px;
+}
+
+
+/* =========================================================
+   재생 버튼
+========================================================= */
+
+.play-button {
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    background:
+        #dff3f7;
+
+    color:
+        #5e9eaa;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 4px 12px
+        rgba(70,120,130,.12);
+
+    transition:
+        transform .2s ease,
+        background .2s ease;
+}
+
+
+.play-button:hover {
+
+    transform:
+        scale(1.08);
+
+    background:
+        #d2edf2;
+}
+
+
+/* =========================================================
+   음악 장식
+========================================================= */
+
+.music-decoration {
+
+    position: absolute;
+
+    top: 7%;
+
+    left: 8%;
+
+    color:
+        rgba(120,180,190,.25);
+
+    font-size: 18px;
+}
+
+
+.music-decoration.two {
+
+    left: auto;
+
+    right: 8%;
+
+    top: 13%;
+
+    font-size: 13px;
+}
+
+
+/* =========================================================
+   넘김 종이
+========================================================= */
+
+.flip-sheet {
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 50%;
+    height: 100%;
+
+    z-index: 100;
+
+    transform-origin:
+        left center;
+
+    transform-style:
+        preserve-3d;
+
+    display: none;
+
+    pointer-events: none;
+}
+
+
+.flip-sheet.active {
+
+    display: block;
+
+    animation:
+        flipForward
+        1.05s
+        cubic-bezier(.22,.61,.36,1)
+        forwards;
+}
+
+
+.flip-front {
+
+    position: absolute;
+
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    overflow: hidden;
+
+    background: #fff;
+
+    backface-visibility:
+        hidden;
+
+    transform:
+        translateZ(.5px);
+
+    box-shadow:
+        -10px 0 25px
+        rgba(0,0,0,0);
+}
+
+
+.flip-front img {
+
+    width: 100%;
+    height: 100%;
+
+    object-fit: cover;
+
+    display: block;
+}
+
+
+.flip-front::after {
+
+    content: "";
+
+    position: absolute;
+
+    inset: 0;
+
+    pointer-events: none;
+
+    background:
+        linear-gradient(
+            to left,
+            rgba(255,255,255,0),
+            rgba(0,0,0,.02) 60%,
+            rgba(0,0,0,.16) 100%
+        );
+
+    opacity: .8;
+}
+
+
+/* =========================================================
+   페이지 넘김 애니메이션
+========================================================= */
+
+@keyframes flipForward {
+
+    0% {
+
+        transform:
+            rotateY(0deg);
+
+        filter:
+            brightness(1);
+
+        box-shadow:
+            -2px 5px 10px
+            rgba(0,0,0,0);
+    }
+
+
+    18% {
+
+        transform:
+            rotateY(-15deg);
+
+        filter:
+            brightness(.99);
+
+        box-shadow:
+            -7px 5px 22px
+            rgba(0,0,0,.07);
+    }
+
+
+    42% {
+
+        transform:
+            rotateY(-65deg);
+
+        filter:
+            brightness(.95);
+
+        box-shadow:
+            -17px 5px 38px
+            rgba(0,0,0,.16);
+    }
+
+
+    65% {
+
+        transform:
+            rotateY(-125deg);
+
+        filter:
+            brightness(.96);
+
+        box-shadow:
+            -23px 5px 43px
+            rgba(0,0,0,.13);
+    }
+
+
+    84% {
+
+        transform:
+            rotateY(-160deg);
+
+        filter:
+            brightness(.985);
+
+        box-shadow:
+            -10px 5px 25px
+            rgba(0,0,0,.06);
+    }
+
+
+    100% {
+
+        transform:
+            rotateY(-180deg);
+
+        filter:
+            brightness(1);
+
+        box-shadow:
+            0 5px 12px
+            rgba(0,0,0,.02);
+    }
+
+}
+
+
+/* =========================================================
+   클릭 영역
+========================================================= */
+
+.next-area {
+
+    position: absolute;
+
+    top: 0;
+    right: 0;
+
+    width: 50%;
+    height: 100%;
+
+    z-index: 200;
+
+    cursor: pointer;
+}
+
+
+.prev-area {
+
+    position: absolute;
+
+    top: 0;
+    left: 0;
+
+    width: 50%;
+    height: 100%;
+
+    z-index: 200;
+
+    cursor: pointer;
+}
+
+
+/*
+   음악 UI를 누를 때는
+   페이지 넘김이 일어나지 않게
+*/
+
+.music-card,
+.music-card * {
+
+    pointer-events: auto;
+}
+
+
+/* =========================================================
+   편집 패널
+========================================================= */
+
+.editor {
+
+    position: fixed;
+
+    top: 20px;
+    left: 20px;
+
+    width: 260px;
+
+    max-height:
+        calc(100vh - 40px);
+
+    overflow-y: auto;
+
+    padding: 18px;
+
+    border-radius: 12px;
+
+    background:
+        rgba(255,255,255,.95);
+
+    backdrop-filter:
+        blur(15px);
+
+    color: #333;
+
+    z-index: 1000;
+
+    box-shadow:
+        0 15px 45px
+        rgba(60,100,110,.22);
+
+    font-size: 12px;
+}
+
+
+.editor h2 {
+
+    margin:
+        0 0 8px;
+
+    font-size: 15px;
+
+    font-weight: 600;
+}
+
+
+.editor-description {
+
+    margin-bottom: 15px;
+
+    color: #777;
+
+    line-height: 1.5;
+}
+
+
+.editor-section {
+
+    padding-top: 13px;
+
+    margin-top: 13px;
+
+    border-top:
+        1px solid
+        rgba(0,0,0,.08);
+}
+
+
+.editor label {
+
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 11px;
+
+    color: #666;
+}
+
+
+.editor input[type="file"] {
+
+    width: 100%;
+
+    margin-bottom: 7px;
+
+    font-size: 10px;
+}
+
+
+.editor input[type="number"] {
+
+    width: 100%;
+
+    padding: 7px;
+
+    margin-bottom: 7px;
+
+    border:
+        1px solid #ddd;
+
+    border-radius: 5px;
+}
+
+
+.editor button {
+
+    width: 100%;
+
+    padding: 8px;
+
+    margin-top: 5px;
+
+    border: none;
+
+    border-radius: 6px;
+
+    background:
+        #e6f5fa;
+
+    color:
+        #35515a;
+
+    cursor: pointer;
+}
+
+
+.editor button:hover {
+
+    background:
+        #d8f0f7;
+}
+
+
+.close-editor {
+
+    position: absolute;
+
+    top: 8px;
+    right: 8px;
+
+    width: auto !important;
+
+    padding:
+        2px 7px !important;
+
+    background:
+        transparent !important;
+
+    color:
+        #777 !important;
+}
+
+
+/* =========================================================
+   설정 버튼
+========================================================= */
+
+.editor-toggle {
+
+    position: fixed;
+
+    left: 20px;
+    bottom: 20px;
+
+    width: 38px;
+    height: 38px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background:
+        rgba(255,255,255,.85);
+
+    color: #555;
+
+    z-index: 999;
+
+    cursor: pointer;
+
+    box-shadow:
+        0 5px 20px
+        rgba(0,0,0,.12);
+}
+
+
+/* =========================================================
+   안내
+========================================================= */
+
+.hint {
+
+    position: fixed;
+
+    bottom: 13px;
+    left: 50%;
+
+    transform:
+        translateX(-50%);
+
+    color:
+        rgba(50,80,90,.55);
+
+    font-size: 10px;
+
+    pointer-events: none;
+}
+
+
+/* =========================================================
+   관람 모드
+
+   URL에 ?view=1 이 붙으면 관람객 화면으로 전환됩니다.
+   편집 패널과 편집 버튼은 화면에서 완전히 숨깁니다.
+   ========================================================= */
+
+body.viewer-mode .editor,
+body.viewer-mode .editor-toggle {
+    display: none !important;
+}
+
+/* =========================================================
+   결과 링크 화면
+========================================================= */
+
+.share-result {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(6px);
+}
+
+.share-result.show {
+    display: flex;
+}
+
+.share-result-card {
+    width: min(560px, 94vw);
+    padding: 28px;
+    border-radius: 22px;
+    background: #fff;
+    box-shadow: 0 20px 60px rgba(0,0,0,.22);
+    text-align: center;
+}
+
+.share-result-card h2 {
+    margin: 0 0 10px;
+}
+
+.share-result-card p {
+    margin: 0 0 16px;
+    line-height: 1.6;
+}
+
+.share-result-url {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 12px 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #f8f8f8;
+    font-size: 12px;
+}
+
+.share-result-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 14px;
+}
+
+.share-result-buttons button {
+    padding: 11px 18px;
+    border: 0;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+/* =========================================================
+   모바일
+========================================================= */
+
+@media (max-width: 700px) {
+
+    .book-wrapper {
+
+        width: 96vw;
+    }
+
+
+    .editor {
+
+        width: 220px;
+
+        top: 10px;
+        left: 10px;
+
+        max-height:
+            calc(100vh - 20px);
+    }
+
+
+    .music-card {
+
+        width: 68%;
+
+        padding: 6%;
+    }
+
+
+    .play-button {
+
+        width: 32px;
+        height: 32px;
+
+        font-size: 12px;
+    }
+
+
+    .hint {
+
+        display: none;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- =======================================================
+     편집 패널
+======================================================= -->
+
+<div
+    class="editor"
+    id="editor">
+
+
+    <button
+        class="close-editor"
+        onclick="toggleEditor()">
+
+        ×
+
+    </button>
+
+
+    <h2>
+        ILLUSTRATION BOOK
+    </h2>
+
+
+    <div class="editor-description">
+
+        표지와 내지를 넣고
+        음악 파일을 추가하면
+        음원에 포함된 앨범아트를
+        자동으로 불러옵니다.
+
+    </div>
+
+
+    <!-- ===================================================
+         표지
+    =================================================== -->
+
+    <div class="editor-section">
+
+        <label>
+            표지 이미지
+        </label>
+
+
+        <input
+            type="file"
+            id="coverInput"
+            accept="image/*">
+
+    </div>
+
+
+    <!-- ===================================================
+         내지
+    =================================================== -->
+
+    <div class="editor-section">
+
+        <label>
+            내지 페이지 번호
+        </label>
+
+
+        <input
+            type="number"
+            id="pageNumber"
+            min="1"
+            max="100"
+            value="1">
+
+
+        <input
+            type="file"
+            id="pageInput"
+            accept="image/*">
+
+    </div>
+
+
+    <!-- ===================================================
+         브금
+    =================================================== -->
+
+    <div class="editor-section">
+
+        <label>
+            브금 / 음악 파일
+        </label>
+
+
+        <input
+            type="file"
+            id="audioInput"
+            accept=".mp3,audio/mpeg">
+
+    </div>
+
+
+    <div class="editor-section">
+
+        <button
+            onclick="shareBook()">
+
+            책 완성하기 / 링크 만들기
+
+        </button>
+
+        <button
+            onclick="resetBook()">
+
+            전체 초기화
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     설정 버튼
+======================================================= -->
+
+<button
+    class="editor-toggle"
+    onclick="toggleEditor()">
+
+    ⚙
+
+</button>
+
+
+<!-- =======================================================
+     책
+======================================================= -->
+
+<!-- =======================================================
+     완성 결과 / 공유 링크
+======================================================= -->
+
+<div
+    class="share-result"
+    id="shareResult">
+
+    <div class="share-result-card">
+
+        <h2>✨ 일러스트레이션북 완성!</h2>
+
+        <p>
+            아래 주소를 그대로 복사해서 보내면<br>
+            다른 사람도 같은 책을 볼 수 있어요.
+        </p>
+
+        <input
+            class="share-result-url"
+            id="shareResultUrl"
+            type="text"
+            readonly>
+
+        <div class="share-result-buttons">
+
+            <button
+                onclick="copyShareLink()">
+                주소 복사
+            </button>
+
+            <button
+                onclick="openShareLink()">
+                책 보기
+            </button>
+
+            <button
+                onclick="closeShareResult()">
+                닫기
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<div class="book-wrapper">
+
+    <div
+        class="book"
+        id="book">
+
+
+        <!-- =================================================
+             첫 화면 왼쪽
+
+             ★ 앨범 이미지가 페이지 전체가 아니라
+               작은 음악 플레이어 안에 들어감
+        ================================================= -->
+
+        <div
+            class="album-page"
+            id="albumPage">
+
+
+            <!-- 장식 -->
+
+            <div
+                class="music-decoration">
+
+                ♪
+
+            </div>
+
+
+            <div
+                class="music-decoration two">
+
+                ♫
+
+            </div>
+
+
+            <!-- =================================================
+                 음악 카드
+            ================================================= -->
+
+            <div
+                class="music-card">
+
+
+                <!-- 앨범아트 -->
+
+                <div
+                    class="album-art-box">
+
+
+                    <div
+                        class="album-art-placeholder"
+                        id="albumPlaceholder">
+
+
+                        <div class="note">
+                            ♪
+                        </div>
+
+
+                        <span>
+
+                            음악 파일의<br>
+                            앨범아트가 표시됩니다.
+
+                        </span>
+
+                    </div>
+
+
+                    <img
+                        id="albumImage"
+                        class="album-art"
+                        alt="Album Art">
+
+                </div>
+
+
+                <!-- 음악 제목 -->
+
+                <div
+                    class="music-title"
+                    id="musicTitle">
+
+                    No Music
+
+                </div>
+
+
+                <!-- =================================================
+                     재생바
+                ================================================= -->
+
+                <div
+                    class="progress-area">
+
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar">
+
+
+                        <div
+                            class="progress-fill"
+                            id="progressFill">
+                        </div>
+
+
+                        <div
+                            class="progress-dot"
+                            id="progressDot">
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        class="time-row">
+
+
+                        <span
+                            id="currentTime">
+
+                            0:00
+
+                        </span>
+
+
+                        <span
+                            id="duration">
+
+                            0:00
+
+                        </span>
+
+
+                    </div>
+
+                </div>
+
+
+                <!-- =================================================
+                     재생 버튼
+                ================================================= -->
+
+                <div
+                    class="music-buttons">
+
+
+                    <button
+                        class="play-button"
+                        id="playButton"
+                        onclick="toggleMusic(event)">
+
+                        ▶
+
+                    </button>
+
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             실제 왼쪽 페이지
+        ================================================= -->
+
+        <div
+            class="page left"
+            id="leftPage"
+            style="display:none;">
+
+            <div
+                class="empty-page">
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             오른쪽 표지
+        ================================================= -->
+
+        <div
+            class="page right"
+            id="rightPage">
+
+            <div
+                class="empty-page">
+            </div>
+
+        </div>
+
+
+        <!-- =================================================
+             넘김 종이
+        ================================================= -->
+
+        <div
+            class="flip-sheet"
+            id="flipSheet">
+
+
+            <div
+                class="flip-front"
+                id="flipFront">
+            </div>
+
+
+        </div>
+
+
+        <!-- =================================================
+             중앙 책등
+        ================================================= -->
+
+        <div
+            class="book-spine">
+        </div>
+
+
+        <!-- =================================================
+             클릭 영역
+        ================================================= -->
+
+        <div
+            class="prev-area"
+            onclick="previousPage()">
+        </div>
+
+
+        <div
+            class="next-area"
+            onclick="nextPage()">
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =======================================================
+     실제 오디오
+======================================================= -->
+
+<audio
+    id="audio"
+    loop>
+</audio>
+
+
+
+<script>
+
+/* =========================================================
+   기본 설정
+========================================================= */
+
+const TOTAL_PAGES = 100;
+
+/* =========================================================
+   관람 / 편집 모드
+
+   관람객 링크:
+   현재주소.html?view=1
+
+   ?view=1 이 붙은 주소에서는 편집 UI를 숨깁니다.
+   ========================================================= */
+
+const isViewerMode =
+    new URLSearchParams(window.location.search).get("view") === "1";
+
+if (isViewerMode) {
+    document.body.classList.add("viewer-mode");
+}
+
+
+
+/* =========================================================
+   페이지 데이터
+========================================================= */
+
+const pages = [];
+
+for (
+    let i = 0;
+    i <= TOTAL_PAGES;
+    i++
+) {
+
+    pages.push({
+        image: null
+    });
+
+}
+
+
+/* =========================================================
+   저장된 책 불러오기
+========================================================= */
+
+async function loadSavedBook() {
+
+    /*
+        1. 먼저 HTML 안에 저장된 데이터가 있으면 불러옵니다.
+        2. #book=... 공유 링크가 있으면 그 데이터를 우선 사용합니다.
+    */
+
+    const hash =
+        window.location.hash;
+
+    const match =
+        hash.match(/^#book=(.+)$/);
+
+    if (match) {
+
+        try {
+
+            const saved =
+                await decodeShareData(match[1]);
+
+            applySavedBookData(saved);
+
+            document.body.classList.add("viewer-mode");
+
+            return;
+
+        } catch (error) {
+
+            console.warn(
+                "공유 링크의 책 데이터를 불러올 수 없습니다.",
+                error
+            );
+
+        }
+
+    }
+
+
+    const savedElement =
+        document.getElementById("savedBookData");
+
+    if (!savedElement) return;
+
+    try {
+
+        const saved =
+            JSON.parse(savedElement.textContent);
+
+        applySavedBookData(saved);
+
+    } catch (error) {
+
+        console.warn(
+            "저장된 책 데이터를 불러올 수 없습니다.",
+            error
+        );
+
+    }
+
+}
+
+
+function applySavedBookData(saved) {
+
+    if (!saved) return;
+
+
+    if (Array.isArray(saved.pages)) {
+
+        saved.pages.forEach(function(page, index) {
+
+            if (
+                pages[index] &&
+                page &&
+                page.image
+            ) {
+
+                pages[index].image =
+                    page.image;
+
+            }
+
+        });
+
+    }
+
+
+    if (saved.audioDataURL) {
+
+        audioDataURL =
+            saved.audioDataURL;
+
+        audio.src =
+            audioDataURL;
+
+        audio.loop =
+            true;
+
+    }
+
+
+    if (saved.musicTitle) {
+
+        document
+            .getElementById("musicTitle")
+            .textContent =
+            saved.musicTitle;
+
+    }
+
+
+    if (saved.albumArt) {
+
+        const image =
+            document.getElementById(
+                "albumImage"
+            );
+
+        const placeholder =
+            document.getElementById(
+                "albumPlaceholder"
+            );
+
+        image.src =
+            saved.albumArt;
+
+        image.style.display =
+            "block";
+
+        placeholder.style.display =
+            "none";
+
+    }
+
+}
+
+
+function uint8ToBase64(bytes) {
+
+    let binary = "";
+
+    const chunkSize = 0x8000;
+
+    for (
+        let i = 0;
+        i < bytes.length;
+        i += chunkSize
+    ) {
+
+        binary += String.fromCharCode(
+            ...bytes.subarray(
+                i,
+                Math.min(
+                    i + chunkSize,
+                    bytes.length
+                )
+            )
+        );
+
+    }
+
+    return btoa(binary)
+        .replace(/\\+/g, "-")
+        .replace(/\\//g, "_")
+        .replace(/=+$/g, "");
+
+}
+
+
+function base64ToUint8(base64) {
+
+    base64 =
+        base64
+            .replace(/-/g, "+")
+            .replace(/_/g, "/");
+
+    while (
+        base64.length % 4
+    ) {
+
+        base64 += "=";
+
+    }
+
+    const binary =
+        atob(base64);
+
+    const bytes =
+        new Uint8Array(
+            binary.length
+        );
+
+    for (
+        let i = 0;
+        i < binary.length;
+        i++
+    ) {
+
+        bytes[i] =
+            binary.charCodeAt(i);
+
+    }
+
+    return bytes;
+
+}
+
+
+async function encodeShareData(data) {
+
+    const json =
+        JSON.stringify(data);
+
+    const bytes =
+        new TextEncoder()
+            .encode(json);
+
+
+    /*
+        최신 브라우저에서는 gzip으로 압축합니다.
+        압축된 데이터는 URL hash에 들어갑니다.
+    */
+
+    if ("CompressionStream" in window) {
+
+        const stream =
+            new Blob([bytes])
+                .stream()
+                .pipeThrough(
+                    new CompressionStream("gzip")
+                );
+
+        const compressed =
+            new Uint8Array(
+                await new Response(stream)
+                    .arrayBuffer()
+            );
+
+        return "g." +
+            uint8ToBase64(compressed);
+
+    }
+
+
+    /*
+        구형 브라우저 fallback
+    */
+
+    return "r." +
+        uint8ToBase64(bytes);
+
+}
+
+
+async function decodeShareData(encoded) {
+
+    const parts =
+        encoded.split(".");
+
+    const type =
+        parts[0];
+
+    const bytes =
+        base64ToUint8(parts.slice(1).join("."));
+
+    let decodedBytes;
+
+
+    if (
+        type === "g" &&
+        "DecompressionStream" in window
+    ) {
+
+        const stream =
+            new Blob([bytes])
+                .stream()
+                .pipeThrough(
+                    new DecompressionStream("gzip")
+                );
+
+        decodedBytes =
+            new Uint8Array(
+                await new Response(stream)
+                    .arrayBuffer()
+            );
+
+    } else {
+
+        decodedBytes =
+            bytes;
+
+    }
+
+
+    const json =
+        new TextDecoder()
+            .decode(decodedBytes);
+
+    return JSON.parse(json);
+
+}
+
+
+/* =========================================================
+   공유 링크 생성
+========================================================= */
+
+async function shareBook() {
+
+    if (isViewerMode) return;
+
+
+    const savedData = {
+
+        pages: pages,
+
+        audioDataURL:
+            audioDataURL || null,
+
+        musicTitle:
+            document
+                .getElementById("musicTitle")
+                .textContent,
+
+        albumArt:
+            await getAlbumArtDataURL()
+
+    };
+
+
+    try {
+
+        const encoded =
+            await encodeShareData(
+                savedData
+            );
+
+
+        /*
+            hash(#)는 서버에 전송되지 않고
+            브라우저에서 JavaScript가 읽습니다.
+        */
+
+        const baseUrl =
+            window.location.href
+                .split("#")[0];
+
+        const shareUrl =
+            baseUrl +
+            "#book=" +
+            encoded;
+
+
+        document
+            .getElementById("shareResultUrl")
+            .value =
+            shareUrl;
+
+
+        document
+            .getElementById("shareResult")
+            .classList.add("show");
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            "공유 링크를 만드는 중 문제가 발생했습니다."
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   공유 결과 화면
+========================================================= */
+
+async function copyShareLink() {
+
+    const input =
+        document.getElementById(
+            "shareResultUrl"
+        );
+
+    const url =
+        input.value;
+
+
+    try {
+
+        await navigator.clipboard.writeText(
+            url
+        );
+
+    } catch (error) {
+
+        input.select();
+
+        document.execCommand(
+            "copy"
+        );
+
+    }
+
+
+    alert(
+        "주소가 복사되었습니다."
+    );
+
+}
+
+
+function openShareLink() {
+
+    const url =
+        document.getElementById(
+            "shareResultUrl"
+        ).value;
+
+    window.open(
+        url,
+        "_blank"
+    );
+
+}
+
+
+function closeShareResult() {
+
+    document
+        .getElementById(
+            "shareResult"
+        )
+        .classList.remove("show");
+
+}
+
+
+
+/* =========================================================
+   상태
+========================================================= */
+
+let currentPage = 0;
+
+let isAnimating = false;
+
+let hasOpenedBook = false;
+
+
+/* =========================================================
+   음악
+========================================================= */
+
+const audio =
+    document.getElementById(
+        "audio"
+    );
+
+
+let audioURL = null;
+
+/* 저장용 음악 데이터 */
+let audioDataURL = null;
+
+
+/* =========================================================
+   이미지 파일 읽기
+========================================================= */
+
+function loadImage(file) {
+
+    return new Promise(
+        (resolve) => {
+
+            if (!file) {
+
+                resolve(null);
+
+                return;
+
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload =
+                function(e) {
+
+                    resolve(
+                        e.target.result
+                    );
+
+                };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   페이지 HTML
+========================================================= */
+
+function pageHTML(pageIndex) {
+
+    if (
+        pages[pageIndex] &&
+        pages[pageIndex].image
+    ) {
+
+        return `
+            <img
+                src="${pages[pageIndex].image}"
+                alt="Page ${pageIndex}">
+        `;
+
+    }
+
+
+    return `
+        <div class="empty-page"></div>
+    `;
+
+}
+
+
+/* =========================================================
+   책 렌더링
+========================================================= */
+
+function renderBook() {
+
+    const left =
+        document.getElementById(
+            "leftPage"
+        );
+
+
+    const right =
+        document.getElementById(
+            "rightPage"
+        );
+
+
+    /*
+        첫 화면
+
+        [ MUSIC ][ COVER ]
+    */
+
+    if (!hasOpenedBook) {
+
+        left.style.display =
+            "none";
+
+
+        right.style.display =
+            "block";
+
+
+        right.innerHTML =
+            pages[0].image
+                ? `
+                    <img
+                        src="${pages[0].image}"
+                        alt="Cover">
+                  `
+                : `
+                    <div class="empty-page"></div>
+                  `;
+
+
+        return;
+
+    }
+
+
+    /*
+        책을 연 후
+
+        [ 1 ][ 2 ]
+        [ 3 ][ 4 ]
+        [ 5 ][ 6 ]
+    */
+
+    left.style.display =
+        "block";
+
+
+    right.style.display =
+        "block";
+
+
+    left.innerHTML =
+        pageHTML(
+            currentPage
+        );
+
+
+    right.innerHTML =
+        pageHTML(
+            currentPage + 1
+        );
+
+}
+
+
+/* =========================================================
+   표지 열기
+========================================================= */
+
+function openBook() {
+
+    if (isAnimating) return;
+
+
+    isAnimating = true;
+
+
+    const flip =
+        document.getElementById(
+            "flipSheet"
+        );
+
+
+    const front =
+        document.getElementById(
+            "flipFront"
+        );
+
+
+    /*
+        표지를 넘김
+    */
+
+    front.innerHTML =
+        pages[0].image
+            ? `
+                <img
+                    src="${pages[0].image}"
+                    alt="Cover">
+              `
+            : `
+                <div class="empty-page"></div>
+              `;
+
+
+    /*
+        첫 내지 미리 준비
+    */
+
+    const left =
+        document.getElementById(
+            "leftPage"
+        );
+
+
+    const right =
+        document.getElementById(
+            "rightPage"
+        );
+
+
+    left.style.display =
+        "block";
+
+
+    left.innerHTML =
+        pageHTML(1);
+
+
+    right.innerHTML =
+        pageHTML(2);
+
+
+    /*
+        앨범 페이지 숨김
+    */
+
+    document
+        .getElementById(
+            "albumPage"
+        )
+        .style.display =
+        "none";
+
+
+    /*
+        애니메이션
+    */
+
+    flip.classList.remove(
+        "active"
+    );
+
+
+    void flip.offsetWidth;
+
+
+    flip.classList.add(
+        "active"
+    );
+
+
+    setTimeout(
+        function() {
+
+            hasOpenedBook = true;
+
+            currentPage = 1;
+
+            flip.classList.remove(
+                "active"
+            );
+
+            renderBook();
+
+            isAnimating = false;
+
+        },
+        1050
+    );
+
+}
+
+
+/* =========================================================
+   다음 페이지
+========================================================= */
+
+function nextPage() {
+
+    /*
+        처음에는 표지를 넘김
+    */
+
+    if (!hasOpenedBook) {
+
+        openBook();
+
+        return;
+
+    }
+
+
+    if (isAnimating) return;
+
+
+    if (
+        currentPage + 2 >
+        TOTAL_PAGES
+    ) {
+
+        return;
+
+    }
+
+
+    isAnimating = true;
+
+
+    const flip =
+        document.getElementById(
+            "flipSheet"
+        );
+
+
+    const front =
+        document.getElementById(
+            "flipFront"
+        );
+
+
+    /*
+        현재 오른쪽 페이지를
+        넘기는 종이로 사용
+    */
+
+    front.innerHTML =
+        pageHTML(
+            currentPage + 1
+        );
+
+
+    /*
+        다음 양면을 밑에 배치
+    */
+
+    const left =
+        document.getElementById(
+            "leftPage"
+        );
+
+
+    const right =
+        document.getElementById(
+            "rightPage"
+        );
+
+
+    left.innerHTML =
+        pageHTML(
+            currentPage + 2
+        );
+
+
+    right.innerHTML =
+        pageHTML(
+            currentPage + 3
+        );
+
+
+    /*
+        애니메이션 시작
+    */
+
+    flip.classList.remove(
+        "active"
+    );
+
+
+    void flip.offsetWidth;
+
+
+    flip.classList.add(
+        "active"
+    );
+
+
+    setTimeout(
+        function() {
+
+            currentPage += 2;
+
+
+            flip.classList.remove(
+                "active"
+            );
+
+
+            renderBook();
+
+
+            isAnimating = false;
+
+        },
+        1050
+    );
+
+}
+
+
+/* =========================================================
+   이전 페이지
+========================================================= */
+
+function previousPage() {
+
+    if (isAnimating) return;
+
+
+    if (!hasOpenedBook) return;
+
+
+    /*
+        첫 내지에서 이전으로 가면
+        다시 앨범 + 표지
+    */
+
+    if (
+        currentPage === 1
+    ) {
+
+        closeBook();
+
+        return;
+
+    }
+
+
+    if (
+        currentPage <= 1
+    ) {
+
+        return;
+
+    }
+
+
+    isAnimating = true;
+
+
+    currentPage -= 2;
+
+
+    renderBook();
+
+
+    const left =
+        document.getElementById(
+            "leftPage"
+        );
+
+
+    left.animate(
+        [
+            {
+                transform:
+                    "translateX(-25px)",
+
+                opacity: .7
+            },
+
+            {
+                transform:
+                    "translateX(0)",
+
+                opacity: 1
+            }
+        ],
+        {
+            duration: 450,
+
+            easing:
+                "cubic-bezier(.22,.61,.36,1)"
+        }
+    );
+
+
+    setTimeout(
+        function() {
+
+            isAnimating = false;
+
+        },
+        450
+    );
+
+}
+
+
+/* =========================================================
+   책 닫기
+========================================================= */
+
+function closeBook() {
+
+    isAnimating = true;
+
+
+    const album =
+        document.getElementById(
+            "albumPage"
+        );
+
+
+    const left =
+        document.getElementById(
+            "leftPage"
+        );
+
+
+    const right =
+        document.getElementById(
+            "rightPage"
+        );
+
+
+    album.style.display =
+        "block";
+
+
+    left.style.display =
+        "none";
+
+
+    right.innerHTML =
+        pages[0].image
+            ? `
+                <img
+                    src="${pages[0].image}"
+                    alt="Cover">
+              `
+            : `
+                <div class="empty-page"></div>
+              `;
+
+
+    album.animate(
+        [
+            {
+                opacity: 0
+            },
+
+            {
+                opacity: 1
+            }
+        ],
+        {
+            duration: 500,
+
+            easing:
+                "cubic-bezier(.22,.61,.36,1)"
+        }
+    );
+
+
+    right.animate(
+        [
+            {
+                opacity: .5
+            },
+
+            {
+                opacity: 1
+            }
+        ],
+        {
+            duration: 500,
+
+            easing:
+                "cubic-bezier(.22,.61,.36,1)"
+        }
+    );
+
+
+    setTimeout(
+        function() {
+
+            currentPage = 0;
+
+            hasOpenedBook = false;
+
+            isAnimating = false;
+
+            renderBook();
+
+        },
+        500
+    );
+
+}
+
+
+/* =========================================================
+   표지 업로드
+========================================================= */
+
+document
+    .getElementById(
+        "coverInput"
+    )
+    .addEventListener(
+        "change",
+        async function() {
+
+            const file =
+                this.files[0];
+
+
+            pages[0].image =
+                await loadImage(
+                    file
+                );
+
+
+            renderBook();
+
+        }
+    );
+
+
+/* =========================================================
+   내지 업로드
+========================================================= */
+
+document
+    .getElementById(
+        "pageInput"
+    )
+    .addEventListener(
+        "change",
+        async function() {
+
+            const file =
+                this.files[0];
+
+
+            const number =
+                parseInt(
+                    document
+                        .getElementById(
+                            "pageNumber"
+                        )
+                        .value
+                );
+
+
+            if (
+                !file ||
+                isNaN(number) ||
+                number < 1 ||
+                number > TOTAL_PAGES
+            ) {
+
+                return;
+
+            }
+
+
+            pages[number].image =
+                await loadImage(
+                    file
+                );
+
+
+            renderBook();
+
+        }
+    );
+
+
+/* =========================================================
+   음악 파일 업로드
+========================================================= */
+
+document
+    .getElementById(
+        "audioInput"
+    )
+    .addEventListener(
+        "change",
+        async function() {
+
+            const file =
+                this.files[0];
+
+
+            if (!file) return;
+
+
+            /* 저장용 음악 데이터 */
+            audioDataURL =
+                await new Promise(function(resolve) {
+
+                    const reader = new FileReader();
+
+                    reader.onload = function(e) {
+                        resolve(e.target.result);
+                    };
+
+                    reader.onerror = function() {
+                        resolve(null);
+                    };
+
+                    reader.readAsDataURL(file);
+
+                });
+
+
+            /*
+                이전 음악 URL 해제
+            */
+
+            if (audioURL) {
+
+                URL.revokeObjectURL(
+                    audioURL
+                );
+
+            }
+
+
+            audioURL =
+                URL.createObjectURL(
+                    file
+                );
+
+
+            audio.src =
+                audioURL;
+
+
+            audio.loop =
+                true;
+
+
+            /*
+                제목
+            */
+
+            document
+                .getElementById(
+                    "musicTitle"
+                )
+                .textContent =
+                file.name;
+
+
+            /*
+                앨범아트 추출
+            */
+
+            try {
+
+                const albumArt =
+                    await extractAlbumArt(
+                        file
+                    );
+
+
+                if (albumArt) {
+
+                    const image =
+                        document
+                            .getElementById(
+                                "albumImage"
+                            );
+
+
+                    const placeholder =
+                        document
+                            .getElementById(
+                                "albumPlaceholder"
+                            );
+
+
+                    image.src =
+                        albumArt;
+
+
+                    image.style.display =
+                        "block";
+
+
+                    placeholder.style.display =
+                        "none";
+
+                }
+
+
+            } catch(error) {
+
+                console.log(
+                    "앨범아트를 읽을 수 없습니다.",
+                    error
+                );
+
+            }
+
+
+            /*
+                자동재생 시도
+            */
+
+            try {
+
+                await audio.play();
+
+                updatePlayButton();
+
+            } catch(error) {
+
+                /*
+                    브라우저가 자동재생을 막은 경우
+
+                    첫 사용자 입력 때 재생
+                */
+
+                console.log(
+                    "브라우저가 자동재생을 차단했습니다."
+                );
+
+            }
+
+        }
+    );
+
+
+/* =========================================================
+   MP3 ID3 앨범아트 추출
+========================================================= */
+
+async function extractAlbumArt(file) {
+
+    if (
+        !file.name
+            .toLowerCase()
+            .endsWith(".mp3")
+    ) {
+
+        return null;
+
+    }
+
+
+    const buffer =
+        await file.arrayBuffer();
+
+
+    const bytes =
+        new Uint8Array(
+            buffer
+        );
+
+
+    /*
+        ID3v2 확인
+    */
+
+    if (
+        bytes[0] !== 0x49 ||
+        bytes[1] !== 0x44 ||
+        bytes[2] !== 0x33
+    ) {
+
+        return null;
+
+    }
+
+
+    const version =
+        bytes[3];
+
+
+    const tagSize =
+        synchsafeInt(
+            bytes,
+            6
+        );
+
+
+    let offset = 10;
+
+
+    const tagEnd =
+        Math.min(
+            10 + tagSize,
+            bytes.length
+        );
+
+
+    /*
+        APIC 검색
+    */
+
+    while (
+        offset + 10 <
+        tagEnd
+    ) {
+
+        const frameId =
+            String.fromCharCode(
+                bytes[offset],
+                bytes[offset + 1],
+                bytes[offset + 2],
+                bytes[offset + 3]
+            );
+
+
+        let frameSize;
+
+
+        if (
+            version === 4
+        ) {
+
+            frameSize =
+                synchsafeInt(
+                    bytes,
+                    offset + 4
+                );
+
+        } else {
+
+            frameSize =
+                (
+                    bytes[offset + 4] << 24
+                ) |
+                (
+                    bytes[offset + 5] << 16
+                ) |
+                (
+                    bytes[offset + 6] << 8
+                ) |
+                    bytes[offset + 7];
+
+        }
+
+
+        if (
+            frameSize <= 0
+        ) {
+
+            break;
+
+        }
+
+
+        /*
+            APIC
+        */
+
+        if (
+            frameId === "APIC"
+        ) {
+
+            const start =
+                offset + 10;
+
+
+            const end =
+                Math.min(
+                    start + frameSize,
+                    bytes.length
+                );
+
+
+            let pos =
+                start;
+
+
+            /*
+                Encoding
+            */
+
+            const encoding =
+                bytes[pos];
+
+
+            pos++;
+
+
+            /*
+                MIME
+            */
+
+            const mimeStart =
+                pos;
+
+
+            while (
+                pos < end &&
+                bytes[pos] !== 0
+            ) {
+
+                pos++;
+
+            }
+
+
+            const mime =
+                new TextDecoder(
+                    "ascii"
+                ).decode(
+                    bytes.slice(
+                        mimeStart,
+                        pos
+                    )
+                );
+
+
+            pos++;
+
+
+            /*
+                Picture type
+            */
+
+            pos++;
+
+
+            /*
+                Description
+            */
+
+            if (
+                encoding === 1 ||
+                encoding === 2
+            ) {
+
+                while (
+                    pos + 1 < end &&
+                    !(
+                        bytes[pos] === 0 &&
+                        bytes[pos + 1] === 0
+                    )
+                ) {
+
+                    pos += 2;
+
+                }
+
+
+                pos += 2;
+
+            } else {
+
+                while (
+                    pos < end &&
+                    bytes[pos] !== 0
+                ) {
+
+                    pos++;
+
+                }
+
+
+                pos++;
+
+            }
+
+
+            /*
+                이미지 데이터
+            */
+
+            if (
+                pos < end
+            ) {
+
+                const imageBytes =
+                    bytes.slice(
+                        pos,
+                        end
+                    );
+
+
+                const blob =
+                    new Blob(
+                        [imageBytes],
+                        {
+                            type:
+                                mime ||
+                                "image/jpeg"
+                        }
+                    );
+
+
+                return URL.createObjectURL(
+                    blob
+                );
+
+            }
+
+        }
+
+
+        offset +=
+            10 + frameSize;
+
+    }
+
+
+    return null;
+
+}
+
+
+/* =========================================================
+   Synchsafe Integer
+========================================================= */
+
+function synchsafeInt(
+    bytes,
+    offset
+) {
+
+    return (
+        ((bytes[offset] & 0x7f) << 21) |
+        ((bytes[offset + 1] & 0x7f) << 14) |
+        ((bytes[offset + 2] & 0x7f) << 7) |
+        (bytes[offset + 3] & 0x7f)
+    );
+
+}
+
+
+/* =========================================================
+   음악 재생 / 정지
+========================================================= */
+
+function toggleMusic(event) {
+
+    if (event) {
+
+        event.stopPropagation();
+
+    }
+
+
+    if (!audio.src) {
+
+        alert(
+            "먼저 브금 파일을 넣어주세요."
+        );
+
+        return;
+
+    }
+
+
+    if (
+        audio.paused
+    ) {
+
+        audio.play()
+            .then(
+                function() {
+
+                    updatePlayButton();
+
+                }
+            )
+            .catch(
+                function() {}
+            );
+
+    } else {
+
+        audio.pause();
+
+        updatePlayButton();
+
+    }
+
+}
+
+
+/* =========================================================
+   재생 버튼 상태
+========================================================= */
+
+function updatePlayButton() {
+
+    const button =
+        document.getElementById(
+            "playButton"
+        );
+
+
+    if (
+        audio.paused
+    ) {
+
+        button.textContent =
+            "▶";
+
+    } else {
+
+        button.textContent =
+            "Ⅱ";
+
+    }
+
+}
+
+
+/* =========================================================
+   시간 포맷
+========================================================= */
+
+function formatTime(seconds) {
+
+    if (
+        !isFinite(seconds)
+    ) {
+
+        return "0:00";
+
+    }
+
+
+    const minutes =
+        Math.floor(
+            seconds / 60
+        );
+
+
+    const secs =
+        Math.floor(
+            seconds % 60
+        );
+
+
+    return (
+        minutes +
+        ":" +
+        String(secs)
+            .padStart(2, "0")
+    );
+
+}
+
+
+/* =========================================================
+   음악 재생바 업데이트
+========================================================= */
+
+audio.addEventListener(
+    "timeupdate",
+    function() {
+
+        if (
+            !audio.duration
+        ) {
+
+            return;
+
+        }
+
+
+        const percent =
+            (
+                audio.currentTime /
+                audio.duration
+            ) * 100;
+
+
+        document
+            .getElementById(
+                "progressFill"
+            )
+            .style.width =
+            percent + "%";
+
+
+        document
+            .getElementById(
+                "progressDot"
+            )
+            .style.left =
+            percent + "%";
+
+
+        document
+            .getElementById(
+                "currentTime"
+            )
+            .textContent =
+            formatTime(
+                audio.currentTime
+            );
+
+    }
+);
+
+
+/* =========================================================
+   음악 전체 시간
+========================================================= */
+
+audio.addEventListener(
+    "loadedmetadata",
+    function() {
+
+        document
+            .getElementById(
+                "duration"
+            )
+            .textContent =
+            formatTime(
+                audio.duration
+            );
+
+    }
+);
+
+
+/* =========================================================
+   재생 상태
+========================================================= */
+
+audio.addEventListener(
+    "play",
+    function() {
+
+        updatePlayButton();
+
+    }
+);
+
+
+audio.addEventListener(
+    "pause",
+    function() {
+
+        updatePlayButton();
+
+    }
+);
+
+
+/* =========================================================
+   재생바 클릭해서 이동
+========================================================= */
+
+document
+    .getElementById(
+        "progressBar"
+    )
+    .addEventListener(
+        "click",
+        function(event) {
+
+            event.stopPropagation();
+
+
+            if (
+                !audio.duration
+            ) {
+
+                return;
+
+            }
+
+
+            const rect =
+                this.getBoundingClientRect();
+
+
+            const position =
+                (
+                    event.clientX -
+                    rect.left
+                ) / rect.width;
+
+
+            audio.currentTime =
+                position *
+                audio.duration;
+
+        }
+    );
+
+
+/* =========================================================
+   첫 사용자 입력 시 자동재생 재시도
+
+   브라우저가 최초 autoplay를 막았다면
+   사용자가 책을 클릭하는 순간 재생
+========================================================= */
+
+let triedAutoplay =
+    false;
+
+
+function tryAutoplay() {
+
+    if (
+        triedAutoplay ||
+        !audio.src
+    ) {
+
+        return;
+
+    }
+
+
+    triedAutoplay = true;
+
+
+    audio.play()
+        .then(
+            function() {
+
+                updatePlayButton();
+
+            }
+        )
+        .catch(
+            function() {
+
+                triedAutoplay =
+                    false;
+
+            }
+        );
+
+}
+
+
+document.addEventListener(
+    "click",
+    function() {
+
+        tryAutoplay();
+
+    },
+    {
+        once: false
+    }
+);
+
+
+/* =========================================================
+   책 저장하기
+
+   현재 편집한 이미지 / 음악 / 앨범아트를
+   하나의 HTML 파일 안에 넣어 저장합니다.
+========================================================= */
+
+async function getAlbumArtDataURL() {
+
+    const image =
+        document.getElementById("albumImage");
+
+    if (!image || image.style.display === "none" || !image.src) {
+        return null;
+    }
+
+    if (image.src.startsWith("data:")) {
+        return image.src;
+    }
+
+    try {
+
+        const response = await fetch(image.src);
+        const blob = await response.blob();
+
+        return await new Promise(function(resolve) {
+
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                resolve(e.target.result);
+            };
+
+            reader.onerror = function() {
+                resolve(null);
+            };
+
+            reader.readAsDataURL(blob);
+
+        });
+
+    } catch (error) {
+
+        console.warn("앨범아트를 저장할 수 없습니다.", error);
+        return null;
+
+    }
+
+}
+
+
+/* 저장 기능은 shareBook()으로 통합되었습니다. */
+
+
+/* =========================================================
+   편집창
+========================================================= */
+
+function toggleEditor() {
+
+    if (isViewerMode) return;
+
+
+    const editor =
+        document.getElementById(
+            "editor"
+        );
+
+
+    if (
+        editor.style.display ===
+        "none"
+    ) {
+
+        editor.style.display =
+            "block";
+
+    } else {
+
+        editor.style.display =
+            "none";
+
+    }
+
+}
+
+
+/* =========================================================
+   키보드
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function(e) {
+
+        const tag =
+            document.activeElement
+                ?.tagName;
+
+
+        /*
+            입력 중이면 무시
+        */
+
+        if (
+            tag === "INPUT" ||
+            tag === "TEXTAREA"
+        ) {
+
+            return;
+
+        }
+
+
+        /*
+            자동재생 시도
+        */
+
+        tryAutoplay();
+
+
+        /*
+            페이지 이동
+        */
+
+        if (
+            e.key === "ArrowRight"
+        ) {
+
+            nextPage();
+
+        }
+
+
+        if (
+            e.key === "ArrowLeft"
+        ) {
+
+            previousPage();
+
+        }
+
+
+        if (
+            e.key.toLowerCase() === "e"
+        ) {
+
+            toggleEditor();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   초기화
+========================================================= */
+
+function resetBook() {
+
+    const result =
+        confirm(
+            "모든 페이지와 음악을 초기화할까요?"
+        );
+
+
+    if (!result) return;
+
+
+    for (
+        let i = 0;
+        i <= TOTAL_PAGES;
+        i++
+    ) {
+
+        pages[i].image =
+            null;
+
+    }
+
+
+    currentPage = 0;
+
+    hasOpenedBook = false;
+
+    isAnimating = false;
+
+
+    /*
+        음악
+    */
+
+    audio.pause();
+
+    audio.src = "";
+
+    audioDataURL = null;
+
+
+    if (audioURL) {
+
+        URL.revokeObjectURL(
+            audioURL
+        );
+
+        audioURL = null;
+
+    }
+
+
+    /*
+        앨범아트
+    */
+
+    const image =
+        document.getElementById(
+            "albumImage"
+        );
+
+
+    const placeholder =
+        document.getElementById(
+            "albumPlaceholder"
+        );
+
+
+    image.src = "";
+
+    image.style.display =
+        "none";
+
+
+    placeholder.style.display =
+        "flex";
+
+
+    /*
+        텍스트
+    */
+
+    document
+        .getElementById(
+            "musicTitle"
+        )
+        .textContent =
+        "No Music";
+
+
+    document
+        .getElementById(
+            "currentTime"
+        )
+        .textContent =
+        "0:00";
+
+
+    document
+        .getElementById(
+            "duration"
+        )
+        .textContent =
+        "0:00";
+
+
+    document
+        .getElementById(
+            "progressFill"
+        )
+        .style.width =
+        "0%";
+
+
+    document
+        .getElementById(
+            "progressDot"
+        )
+        .style.left =
+        "0%";
+
+
+    document
+        .getElementById(
+            "playButton"
+        )
+        .textContent =
+        "▶";
+
+
+    renderBook();
+
+}
+
+
+/* =========================================================
+   초기 렌더링
+========================================================= */
+
+loadSavedBook().then(function() {
+
+    renderBook();
+
+});
+
+</script>
+
+</body>
+
+</html>
